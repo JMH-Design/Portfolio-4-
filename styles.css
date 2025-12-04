@@ -184,8 +184,71 @@ body.light-mode .moon-icon {
   margin-bottom: 60px;
 }
 
+.hero-grid {
+  touch-action: none;
+  display: grid;
+  grid-template: repeat(var(--grid-rows, 2), 1fr) / repeat(
+      var(--grid-cols, 20),
+      1fr
+    );
+  font-size: clamp(1rem, 2vw, 2rem);
+  font-weight: 600;
+  line-height: 1;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  cursor: none;
+  margin: 20px 0;
+  width: 100%;
+  gap: 2px;
+}
+
+.hero-grid div {
+  touch-action: none;
+  padding: 2px;
+  opacity: calc(var(--cell-opacity, 0.5) * 0.7);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  transition-property: opacity, rotate, color;
+  transition-duration: 0.8s, 0.4s, 0.6s;
+  transition-timing-function: ease-in, ease-out, ease-out;
+  scale: 1.5;
+  color: hsl(0 0% 100%);
+}
+
+body.light-mode .hero-grid div {
+  opacity: calc(var(--cell-opacity, 0.5) * 0.7);
+  color: hsl(0 0% 50%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-grid div:hover {
+    transition-property: opacity, rotate, color;
+    transition-duration: 0s;
+    rotate: calc(var(--cell-grade, 0) * 90deg);
+    opacity: 1;
+    color: hsl(0 0% var(--cell-lightness-dark, 92%));
+  }
+
+  body.light-mode .hero-grid div:hover {
+    opacity: 1;
+    color: hsl(0 0% var(--cell-lightness-light, 25%));
+  }
+}
+
+.hero-grid div[data-hover] {
+  transition-property: opacity, rotate, color;
+  transition-duration: 0s;
+  rotate: calc(var(--cell-grade, 0) * 90deg);
+  opacity: 1;
+  color: hsl(0 0% var(--cell-lightness-dark, 92%));
+}
+
+body.light-mode .hero-grid div[data-hover] {
+  color: hsl(0 0% var(--cell-lightness-light, 25%));
+}
+
 .hero-heading {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   line-height: 1.2;
 }
 
@@ -277,7 +340,6 @@ body.light-mode .moon-icon {
   transition: background-color 0.3s ease;
 }
 
-/* Mobile Navigation Styles */
 .mobile-nav-header {
   display: none;
   position: fixed;
@@ -459,6 +521,14 @@ body.light-mode .mobile-theme-toggle-container {
     font-size: 48px;
   }
 
+  .hero-grid {
+    grid-template: repeat(var(--grid-rows, 2), 1fr) / repeat(
+        var(--grid-cols, 12),
+        1fr
+      );
+    font-size: 1.2rem;
+  }
+
   .project-gallery {
     grid-template-columns: 1fr;
   }
@@ -493,6 +563,14 @@ body.light-mode .mobile-theme-toggle-container {
 
   .hero-name {
     font-size: 40px;
+  }
+
+  .hero-grid {
+    grid-template: repeat(var(--grid-rows, 2), 1fr) / repeat(
+        var(--grid-cols, 8),
+        1fr
+      );
+    font-size: 1rem;
   }
 
   .intro-text,

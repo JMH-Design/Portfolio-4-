@@ -126,3 +126,74 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// Hero grid functionality
+document.addEventListener('DOMContentLoaded', () => {
+  const grid = document.querySelector('.hero-grid');
+  if (!grid) return;
+
+  const getColCount = () => {
+    if (window.innerWidth <= 480) return 8;
+    if (window.innerWidth <= 768) return 12;
+    return 20;
+  };
+
+  const config = {
+    cols: getColCount(),
+    rows: 1,
+  };
+
+  const buildGrid = () => {
+    const totalCells = config.cols * config.rows;
+    grid.innerHTML = new Array(totalCells)
+      .fill(0)
+      .map(
+        () => `
+      <div style="
+        --cell-grade: ${Math.floor(Math.random() * 12 - 6)};
+        --cell-opacity: ${0.3 + Math.random() * 0.5};
+        --cell-lightness-light: ${15 + Math.floor(Math.random() * 26)};
+        --cell-lightness-dark: ${85 + Math.floor(Math.random() * 13)};
+      ">+</div>
+    `
+      )
+      .join('');
+    grid.style.setProperty('--grid-cols', config.cols);
+    grid.style.setProperty('--grid-rows', config.rows);
+  };
+
+  buildGrid();
+
+  // Rebuild grid on resize
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      config.cols = getColCount();
+      buildGrid();
+    }, 250);
+  });
+
+  // Touch device support
+  if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
+    grid.addEventListener(
+      'pointermove',
+      (event) => {
+        document.querySelector('[data-hover]')?.removeAttribute('data-hover');
+        const element = document.elementFromPoint(event.x, event.y);
+        if (element && element.parentElement === grid) {
+          element.dataset.hover = 'true';
+        }
+      },
+      true
+    );
+
+    grid.addEventListener(
+      'pointerleave',
+      () => {
+        document.querySelector('[data-hover]')?.removeAttribute('data-hover');
+      },
+      true
+    );
+  }
+});
